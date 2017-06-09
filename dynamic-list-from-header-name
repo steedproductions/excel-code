@@ -1,0 +1,12 @@
+//with this code, we are essentially trying to create a column reference, i.e. yourTab!A2:A5
+
+INDIRECT("tabName!"& // working toward creating a column reference, beginning with the tab name and an "!"
+  SUBSTITUTE(ADDRESS(1,MATCH("headerName",INDIRECT("tabName!$1:$1"),0),4),"1","") //returns the column letter of the list
+  &"2:"& //lists begin on the second row
+  SUBSTITUTE(ADDRESS(1,MATCH("headerName",INDIRECT("tabName!$1:$1"),0),4),"1","") //again, we are getting the column letter
+    //essentially, what we have now is, if the table name were "tableName" and the column was A --tableName!A2:A --
+    //Our next step is to find out how many entries there are in the column
+  &COUNTIF(
+    INDIRECT("tabName!"& //again we are creating a column reference, this time for the entire column
+      SUBSTITUTE(ADDRESS(1,MATCH("headerName",INDIRECT("tabName!$1:$1"),0),4),"1","")&":"& //First instance of the column letter
+      SUBSTITUTE(ADDRESS(1,MATCH("headerName",INDIRECT("tabName!$1:$1"),0),4),"1","")),"?*") //repeat for second instance
